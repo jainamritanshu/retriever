@@ -25,11 +25,10 @@ class main(Script):
         self.description = "Compilation of digitized museum records of mammals including locations, dates of collection, and some trait data."
         self.keywords = ['mammals']
 
-        if parse_version(VERSION) < parse_version("2.1.dev"):
+        if parse_version(VERSION) < parse_version("2.0.0"):
             self.shortname = self.name
             self.name = self.title
             self.tags = self.keywords
-
 
     def download(self, engine=None, debug=False):
         Script.download(self, engine, debug)

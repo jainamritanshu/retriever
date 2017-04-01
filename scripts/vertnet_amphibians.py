@@ -6,7 +6,6 @@ from builtins import str
 from retriever.lib.models import Table
 from retriever.lib.templates import Script
 import os
-
 from retriever import VERSION
 from pkg_resources import parse_version
 
@@ -26,7 +25,7 @@ class main(Script):
         self.description = "Compilation of digitized museum records of amphibians including locations, dates of collection, and some trait data."
         self.keywords = ['amphibians']
 
-        if parse_version(VERSION) < parse_version("2.1.dev"):
+        if parse_version(VERSION) < parse_version("2.0.0"):
             self.shortname = self.name
             self.name = self.title
             self.tags = self.keywords

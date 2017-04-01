@@ -37,10 +37,15 @@ class main(Script):
                      "species": "ftp://ftpext.usgs.gov/pub/er/md/laurel/BBS/DataFiles/SpeciesList.txt"
                      }
 
-        if parse_version(VERSION) < parse_version("2.1.dev"):
+        if parse_version(VERSION) < parse_version("2.0.0"):
             self.shortname = self.name
             self.name = self.title
             self.tags = self.keywords
+            self.cleanup_func_table = Cleanup(correct_invalid_value, nulls=['NULL'])
+            self.cleanup_func_clean = Cleanup(correct_invalid_value, nulls = ['*'])
+        else:
+            self.cleanup_func_table = Cleanup(correct_invalid_value, missingValues=['NULL'])
+            self.cleanup_func_clean = Cleanup(correct_invalid_value, missingValues = ['*'])
             
     def download(self, engine=None, debug=False):
         try:
@@ -97,7 +102,7 @@ class main(Script):
                 read.close()
 
             engine.auto_create_table(Table("weather", pk="RouteDataId",
-                                           cleanup=Cleanup(correct_invalid_value, missingValues=['NULL'])),
+                                           cleanup=self.cleanup_func_table),
                                      filename="weather_new.csv")
             engine.insert_data_from_file(engine.format_filename("weather_new.csv"))
 
@@ -179,8 +184,7 @@ class main(Script):
                     except:
                         print("Failed bulk insert on " + state + ", inserting manually.")
                         engine.connection.rollback()
-                        engine.table.cleanup = Cleanup(correct_invalid_value,
-                                                       missingValues=['*'])
+                        engine.table.cleanup = self.cleanup_func_clean
                         engine.insert_data_from_archive(self.urls["counts"] + shortstate + ".zip",
                                                         [shortstate + ".csv"])
 
