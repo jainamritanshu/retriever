@@ -60,4 +60,4 @@ vertnet_mammals.py,1.0.0
 vertnet_reptiles.py,1.0.0
 wine_composition.json,1.1.1
 wine_quality.json,1.1.1
-wood_density.py,1.2.1
+wood_density.py,1.3.0
